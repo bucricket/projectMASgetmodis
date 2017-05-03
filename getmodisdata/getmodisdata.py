@@ -61,21 +61,17 @@ if not os.path.exists(landsatTemp):
 
 def getMODISdata(tiles,product,version,startDate,endDate,auth):    
 
-    if version.startswith('MCD'):
-        subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
-            "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-            "%s" % tiles,"-s","MOTA", "-f", "%s" % startDate,"-e", "%s" % endDate, 
-             "%s" % modisBase])
-    elif version.startswith('MOD'):
-        subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
-            "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-            "%s" % tiles,"-s","MOLT", "-f", "%s" % startDate,"-e", "%s" % endDate, 
-             "%s" % modisBase])
+    if product.startswith('MCD'):
+            folder = "MOTA"
+    elif product.startswith('MOD'):
+            folder = "MOLT"
     else:
-        subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
-            "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-            "%s" % tiles,"-s","MOLA", "-f", "%s" % startDate,"-e", "%s" % endDate, 
-             "%s" % modisBase])
+        folder = "MOTA"
+        
+    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
+        "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
+        "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
+         "%s" % modisBase])
 
                  
 def latlon2MODtile(lat,lon):
