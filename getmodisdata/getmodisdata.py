@@ -51,7 +51,7 @@ def folders(base):
     'resultsBase':resultsBase,'landsatLC':landsatLC,'albedoBase':albedoBase,
     'ndviBase':ndviBase,'landsatSR':landsatSR,'modisBase':modisBase,'landsatLAI':landsatLAI}
     return out
- 
+Folders = folders(base)
 modisBase = Folders['modisBase']
 landsatSR = Folders['landsatSR']
 landsatLAI = Folders['landsatLAI']
