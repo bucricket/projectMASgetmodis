@@ -67,11 +67,15 @@ def getMODISdata(tiles,product,version,startDate,endDate,auth):
         folder = 'MOLT'
     else:
         folder = 'MOLA'
+        
+#    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
+#                    "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
+#                    "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
+#                     "%s" % modisBase])
     subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
-                    "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-                    "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
-                     "%s" % modisBase])
-                     
+                "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
+                "%s" % tiles,"-s","MOTA", "-f", "%s" % startDate,"-e", "%s" % endDate, 
+                 "%s" % modisBase])                 
 def latlon2MODtile(lat,lon):
     # reference: https://code.env.duke.edu/projects/mget/wiki/SinusoidalMODIS
     p_modis_grid = Proj('+proj=sinu +R=6371007.181 +nadgrids=@null +wktext')
@@ -94,7 +98,7 @@ def main():
     parser.add_argument("lat", type=float, help="latitude")
     parser.add_argument("lon", type=float, help="longitude")
     parser.add_argument("startDate", type=str, help="Start date yyyy-mm-dd")
-    parser.add_argument("endDate", type=str, help="Start date yyyy-mm-dd")
+    parser.add_argument("endDate", type=str, help="end date yyyy-mm-dd")
     parser.add_argument("product", type=str, help="MODIS product")
     parser.add_argument("version", type=str, help="MODIS product version")
     args = parser.parse_args()
