@@ -62,11 +62,11 @@ if not os.path.exists(landsatTemp):
 def getMODISdata(tiles,product,version,startDate,endDate,auth):    
 
     if version.startswith('MCD'):
-        folder = 'MOTA'
+        folder = "MOTA"
     elif version.startswith('MOD'):
-        folder = 'MOLT'
+        folder = "MOLT"
     else:
-        folder = 'MOLA'
+        folder = "MOLA"
         
 #    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
 #                    "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
@@ -74,7 +74,7 @@ def getMODISdata(tiles,product,version,startDate,endDate,auth):
 #                     "%s" % modisBase])
     subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
                 "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-                "%s" % tiles,"-s","MOTA", "-f", "%s" % startDate,"-e", "%s" % endDate, 
+                "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
                  "%s" % modisBase])                 
 def latlon2MODtile(lat,lon):
     # reference: https://code.env.duke.edu/projects/mget/wiki/SinusoidalMODIS
