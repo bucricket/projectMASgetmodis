@@ -14,8 +14,7 @@ import keyring
 import pycurl
 
 
-base = os.getcwd()
-Folders = folders(base)  
+base = os.getcwd()  
 
 def folders(base):
     dataBase = os.path.join(base,'data')
