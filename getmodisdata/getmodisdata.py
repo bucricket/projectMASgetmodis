@@ -40,8 +40,17 @@ def getMODISdata(tiles,product,version,start_date,end_date,auth):
     if not os.path.exists(product_path):
         os.mkdir(product_path)
         
-    downModis(product_path, auth[1], auth[0],tiles=tiles, path=folder, 
-              product=product,today=start_date,enddate=end_date)
+    modisOgg = downModis(url="https://e4ftl01.cr.usgs.gov", destinationFolder=product_path, 
+                         user=auth[0], password=auth[1], tiles=tiles, path=folder, 
+                         product="%s.%s" %(product,version),today=start_date,enddate=end_date)
+
+    # connect to http or ftp
+    modisOgg.connect()
+    if modisOgg.nconnection <= 20:
+        # download data
+        modisOgg.downloadsAllDay()
+    else:
+        print("A problem with the connection occured")
 #    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
 #        "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
 #        "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
