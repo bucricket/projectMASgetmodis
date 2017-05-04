@@ -42,7 +42,7 @@ def getMODISdata(tiles,product,version,start_date,end_date,auth):
         
     modisOgg = downModis(url="https://e4ftl01.cr.usgs.gov", destinationFolder=product_path, 
                          user=auth[0], password=auth[1], tiles=tiles, path=folder, 
-                         product="%s.%s" %(product,version),today=start_date,enddate=end_date)
+                         product="%s.%s" % (product,version),today=start_date,enddate=end_date)
 
     # connect to http or ftp
     modisOgg.connect()
