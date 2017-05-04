@@ -12,54 +12,23 @@ import argparse
 import getpass
 import keyring
 import pycurl
+from pymodis.downmodis import downModis
 
 
 base = os.getcwd()  
 
 def folders(base):
     dataBase = os.path.join(base,'data')
-    landsatDataBase = os.path.join(dataBase,'Landsat-8')
-    metBase = os.path.join(dataBase,'MET')
-    if not os.path.exists(metBase):
-        os.makedirs(metBase) 
-    ALEXIbase = os.path.join(dataBase,'ALEXI')
-    if not os.path.exists(ALEXIbase):
-        os.makedirs(ALEXIbase) 
-    albedoBase = os.path.join(landsatDataBase,'albedo')
-    if not os.path.exists(albedoBase):
-        os.makedirs(albedoBase)   
-    ndviBase = os.path.join(landsatDataBase,'ndvi')
-    if not os.path.exists(ndviBase):
-        os.makedirs(ndviBase)
-    landsatSR = os.path.join(landsatDataBase,'SR')
-    if not os.path.exists(landsatSR):
-        os.makedirs(landsatSR)
-    resultsBase = os.path.join(base,'outputs')
-    if not os.path.exists(resultsBase):
-        os.makedirs(resultsBase)
-    landsatLC = os.path.join(landsatDataBase,'LC')
-    if not os.path.exists(landsatLC):
-        os.makedirs(landsatLC)
-    landsatLAI = os.path.join(landsatDataBase,'LAI')
-    if not os.path.exists(landsatLAI):
-        os.makedirs(landsatLAI)
-    modisBase = os.path.join(base,'data','MODIS')
+    modisBase = os.path.join(dataBase,'MODIS')
     if not os.path.exists(modisBase):
         os.mkdir(modisBase)
-    out = {'dataBase':dataBase,'metBase':metBase,
-           'ALEXIbase':ALEXIbase,'landsatDataBase':landsatDataBase,
-    'resultsBase':resultsBase,'landsatLC':landsatLC,'albedoBase':albedoBase,
-    'ndviBase':ndviBase,'landsatSR':landsatSR,'modisBase':modisBase,'landsatLAI':landsatLAI}
+    out = {'modisBase':modisBase}
     return out
 Folders = folders(base)
 modisBase = Folders['modisBase']
-landsatSR = Folders['landsatSR']
-landsatLAI = Folders['landsatLAI']
-landsatTemp = os.path.join(landsatSR,'temp')
-if not os.path.exists(landsatTemp):
-    os.mkdir(landsatTemp)
 
-def getMODISdata(tiles,product,version,startDate,endDate,auth):    
+
+def getMODISdata(tiles,product,version,start_date,end_date,auth):    
 
     if product.startswith('MCD'):
             folder = "MOTA"
@@ -67,13 +36,16 @@ def getMODISdata(tiles,product,version,startDate,endDate,auth):
             folder = "MOLT"
     else:
         folder = "MOTA"
-    productPath = os.path.join(modisBase,product)   
-    if not os.path.exists(productPath):
-        os.mkdir(productPath)
-    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
-        "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
-        "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
-         "%s" % productPath])
+    product_path = os.path.join(modisBase,product)   
+    if not os.path.exists(product_path):
+        os.mkdir(product_path)
+        
+    downModis(product_path, auth[1], auth[0],tiles=tiles, path=folder, 
+              product=product,todat=start_date,enddate=end_date)
+#    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
+#        "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
+#        "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
+#         "%s" % productPath])
 
                  
 def latlon2MODtile(lat,lon):
@@ -88,8 +60,6 @@ def latlon2MODtile(lat,lon):
     H = (x-ulx)/tileWidth
     V = 18-((y-uly)/tileWidth)
     return int(V),int(H)
-
-
 
 
 def main():
@@ -121,7 +91,6 @@ def main():
     version = args.version
     [v,h]= latlon2MODtile(args.lat,args.lon)
     tiles = "h%02dv%02d" %(h,v)
-    #tiles = 'h10v04,h10v05'
     
     # download MODIS LAI over the same area and time
     print("Downloading MODIS data...")
