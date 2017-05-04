@@ -67,11 +67,13 @@ def getMODISdata(tiles,product,version,startDate,endDate,auth):
             folder = "MOLT"
     else:
         folder = "MOTA"
-        
+    productPath = os.path.join(modisBase,product)   
+    if not os.path.exists(productPath):
+        os.mkdir(productPath)
     subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
         "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
         "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
-         "%s" % modisBase])
+         "%s" % productPath])
 
                  
 def latlon2MODtile(lat,lon):
