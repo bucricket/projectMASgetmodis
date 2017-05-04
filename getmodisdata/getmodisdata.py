@@ -41,7 +41,7 @@ def getMODISdata(tiles,product,version,start_date,end_date,auth):
         os.mkdir(product_path)
         
     downModis(product_path, auth[1], auth[0],tiles=tiles, path=folder, 
-              product=product,todat=start_date,enddate=end_date)
+              product=product,today=start_date,enddate=end_date)
 #    subprocess.call(["modis_download.py", "-r", "-U", "%s" % auth[0], "-P", 
 #        "%s" % auth[1],"-p", "%s.%s" % (product,version), "-t", 
 #        "%s" % tiles,"-s","%s" % folder, "-f", "%s" % startDate,"-e", "%s" % endDate, 
